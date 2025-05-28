@@ -1,10 +1,29 @@
 #include <iostream>
 using namespace std;
 
+int action;
+
+void start() {
+
+}
+
+void settings(){
+
+}
+
 int main() {
-  int x;
-  cout << "Type a number: "; // Type a number and press enter
-  cin >> x; // Get user input from the keyboard
-  cout << "Your number is: " << x;
+  cout << "Menu\n";
+  cout << "[1]: Start\n[2]: Settings\n[0]: Exit\n";
+  cin >> action;
+  if (action == 1) {
+    start();
+  } else if (action == 2) {
+    settings();
+  } else if (action == 0) {
+    
+  } else {
+    cout << "Unkown Command";
+  }
+
   return 0;
 }
