@@ -8,7 +8,17 @@ void start() {
 }
 
 void settings(){
+  cout << "[1]: GUI\n[2]: Logic\n[0]: Exit";
+  cin >> action;
+  if (action == 1) {
 
+  } else if (action == 2) {
+
+  } else if (action == 0) {
+
+  } else {
+    cout << "Unkown Command";
+  }
 }
 
 int main() {
