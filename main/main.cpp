@@ -49,7 +49,10 @@ int main() {
 		break;
         }
 	else {
-		std::cout << "Invalid input";
+		clearScreen();
+		printBoard();
+		std::cout << "Invalid input \n";
+		
 	}
     }
     
