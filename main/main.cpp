@@ -1,6 +1,9 @@
 #include <iostream>
 #include <bitset>
 
+void clearScreen() {
+    std::cout << "\033[2J\033[1;1H";
+}
 
 std::bitset<4> board[8][8] = {
     {8, 4, 6, 10, 12, 6, 4, 8},
@@ -31,15 +34,23 @@ void makeMove(const std::string& move) {
     board[y1][x1] = 0;
 }
 
-int main(int argc, char const *argv[]) {
-    printBoard();
+int main() {
+	clearScreen();
+    	printBoard();
     while (true) {
         std::string move;
         std::cin >> move;
         if (move.length() == 4) {
             makeMove(move);
+	    clearScreen();
             printBoard();
+	}
+	else if (move == "q") {
+		break;
         }
+	else {
+		std::cout << "Invalid input";
+	}
     }
     
     return 0;
