@@ -1,36 +1,61 @@
 #include <iostream>
 #include <bitset>
+#include <string>
+#include <vector>
+#include <cstdint>
 
 void clearScreen() {
     std::cout << "\033[2J\033[1;1H";
 }
 
-std::bitset<4> board[8][8] = {
-    {8, 4, 6, 10, 12, 6, 4, 8},
-    {2, 2, 2, 2, 2, 2, 2, 2},
-    {0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0},
-    {3, 3, 3, 3, 3, 3, 3, 3},
-    {9, 5, 7, 11, 13, 7, 5, 9}
+enum Piece : uint8_t {
+    EMPTY = 0,
+    WPAWN = 2, BPAWN = 3,
+    WROOK = 4, BROOK = 5,
+    WKNIGHT = 6, BKNIGHT = 7,
+    WBISHOP = 8, BBISHOP = 9,
+    WQUEEN = 10, BQUEEN = 11,
+    WKING = 12, BKING = 13
 };
 
-void printBoard() {
-	std::cout << " 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  \n";
-    for (int row = 7; row >= 0; row--) {
-        for (int col = 0; col < 8; col++) {
-            std::cout <<  board[row][col] << " ";
-        }
-        std::cout << row+1  << "\n";
+std::bitset<4> board[8][8] = {
+    {WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK},
+    {WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN},
+    {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+    {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+    {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+    {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
+    {BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN},
+    {BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK}
+};
+
+char pieceToChar(std::bitset<4> p) {
+    switch(p.to_ulong()) {
+        case WPAWN: return 'P'; case BPAWN: return 'p';
+        case WROOK: return 'R'; case BROOK: return 'r';
+        case WKNIGHT: return 'N'; case BKNIGHT: return 'n';
+        case WBISHOP: return 'B'; case BBISHOP: return 'b';
+        case WQUEEN: return 'Q'; case BQUEEN: return 'q';
+        case WKING: return 'K'; case BKING: return 'k';
+        default: return '.';
     }
 }
 
+void printBoard() {
+    for (int y = 7; y >= 0; y--) {
+        for (int x = 0; x < 8; x++) {
+            std::cout <<  pieceToChar(board[y][x]) << " ";
+        }
+        std::cout << y+1  << "\n";
+    }
+    std::cout << "A|B|C|D|E|F|G|H|\n";
+}
+
 void makeMove(const std::string& move) {
-    int x1 = move[0] - '0' - 1;
-    int y1 = move[1] - '0' - 1;
-    int x2 = move[2] - '0' - 1;
-    int y2 = move[3] - '0' - 1;
+    int x1 = move[0] - 'a';
+    int y1 = move[1] - '1';
+    int x2 = move[2] - 'a';
+    int y2 = move[3] - '1';
     if (board[y1][x1].to_ulong() > 0 && (board[y2][x2].to_ulong() % 2 != board[y1][x1].to_ulong() %2 || board[y2][x2].to_ulong() == 0)) {
     	board[y2][x2] = board[y1][x1];
     	board[y1][x1] = 0;    
