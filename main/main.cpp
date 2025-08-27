@@ -32,9 +32,11 @@ void makeMove(const std::string& move) {
     int x2 = move[2] - '0' - 1;
     int y2 = move[3] - '0' - 1;
     if (board[y1][x1].to_ulong() > 0) {
+	if (board[y2][x2].to_ulong() % 2 != board[y1][x1].to_ulong() %2){
     	board[y2][x2] = board[y1][x1];
     	board[y1][x1] = 0;    
-	}
+		}
+    	}
 }
 
 int main() {
