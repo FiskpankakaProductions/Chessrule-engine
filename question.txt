@@ -1,3 +1,0 @@
-Hur bör filstrukturen vara?
-   > Fungerar denna fillstruktur?
-   > Hur bör den annars se ut?
