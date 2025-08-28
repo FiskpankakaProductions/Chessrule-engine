@@ -8,6 +8,10 @@ void clearScreen() {
     std::cout << "\033[2J\033[1;1H";
 }
 
+void lastMove(std::string latestMove) {
+	std::cout << "Last move: " << latestMove << "\n";
+}
+
 enum Piece : uint8_t {
     EMPTY = 0,
     WPAWN = 2, BPAWN = 3,
@@ -65,6 +69,7 @@ void makeMove(const std::string& move) {
 int main() {
 	clearScreen();
     	printBoard();
+	lastMove("");
     while (true) {
         std::string move;
         std::cin >> move;
@@ -72,6 +77,7 @@ int main() {
             makeMove(move);
 	        clearScreen();
             printBoard();
+	    lastMove(move);
 	    }
         else if (move == "q") {
             break;
