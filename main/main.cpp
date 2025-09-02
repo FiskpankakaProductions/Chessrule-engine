@@ -24,7 +24,7 @@ enum Piece : uint8_t {
     WKING = 12, BKING = 13
 };
 
-std::bitset<4> board[8][8] = {
+std::bitset<4> setupBoard[8][8] = {
     {WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK},
     {WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN},
     {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
@@ -35,10 +35,17 @@ std::bitset<4> board[8][8] = {
     {BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK}
 };
 
-std::bitset<6> PiecePos[2][16] = {
-    {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14},
-    {48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63}
-};
+std::bitset<4> board[8][8];
+std::array<std::vector<std::bitset<6>>, 2> piecePos;
+
+void setup() {
+    for (int y = 0; y < 8; y++) {
+        for (int x = 0; x < 8; x++) {
+            board[y][x] = setupBoard[y][x];
+        }
+    }
+}
+
 
 char pieceToChar(std::bitset<4> p) {
     switch(p.to_ulong()) {
@@ -62,6 +69,14 @@ void printBoard() {
     std::cout << "A|B|C|D|E|F|G|H|\n";
 }
 
+void GetPieceMoves(std::vector<uint16_t> &Moves) {
+
+}
+
+void GetLegalMoves(std::vector<uint16_t> &Moves) {
+
+}
+
 bool makeMove(const std::string& move) {
     int x1 = move[0] - 'a';
     int y1 = move[1] - '1';
@@ -77,12 +92,12 @@ bool makeMove(const std::string& move) {
 }
 
 int main() {
-
 	clearScreen();
     printBoard();
 	lastMove("");
 
     turn = false;
+    setup();
 
     while (true) {
         std::string move;
