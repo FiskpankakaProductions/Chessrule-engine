@@ -102,16 +102,14 @@ int main() {
     while (true) {
         std::string move;
         std::cin >> move;
-        if (!makeMove(move)){
-            if (move == "q") {
+	if (move == "q") {
                 break;
-            }	
-            else {
+        }
+	else if (!makeMove(move)){
                 clearScreen();
                 printBoard();
                 std::cout << "Invalid input \n";
                 continue;
-            }
         }
         turn = !turn;
         clearScreen();
