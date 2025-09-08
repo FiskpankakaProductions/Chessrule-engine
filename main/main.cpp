@@ -24,25 +24,21 @@ enum Piece : uint8_t {
     WKING = 12, BKING = 13
 };
 
-std::bitset<4> setupBoard[8][8] = {
-    {WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK},
-    {WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN},
-    {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-    {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-    {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-    {EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY},
-    {BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN},
-    {BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK}
+std::bitset<4> setupBoard[64] = {
+    WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK,
+    WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN,
+    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
+    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
+    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
+    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
+    BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN,
+    BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK
 };
 
-std::bitset<4> board[8][8];
-std::array<std::vector<std::bitset<6>>, 2> piecePos;
-
+std::bitset<4> board[64];
 void setup() {
-    for (int y = 0; y < 8; y++) {
-        for (int x = 0; x < 8; x++) {
-            board[y][x] = setupBoard[y][x];
-        }
+    for (int i = 0; i < 64; i++) {
+        board[i] = setupBoard[i];
     }
 }
 
@@ -59,12 +55,16 @@ char pieceToChar(std::bitset<4> p) {
     }
 }
 
+int IndexFrom2D(int x, int y) {
+    return y * 8 + x;
+}
+
 void printBoard() {
     for (int y = 7; y >= 0; y--) {
         for (int x = 0; x < 8; x++) {
-            std::cout <<  pieceToChar(board[y][x]) << " ";
+            std::cout << pieceToChar(board[IndexFrom2D(x, y)]) << " ";
         }
-        std::cout << y+1  << "\n";
+        std::cout <<  "|" << (y + 1) << "\n";
     }
     std::cout << "A|B|C|D|E|F|G|H|\n";
 }
@@ -78,13 +78,11 @@ void GetLegalMoves(std::vector<uint16_t> &Moves) {
 }
 
 bool makeMove(const std::string& move) {
-    int x1 = move[0] - 'a';
-    int y1 = move[1] - '1';
-    int x2 = move[2] - 'a';
-    int y2 = move[3] - '1';
-    if (board[y1][x1].to_ulong() > 0 && (board[y2][x2].to_ulong() % 2 != board[y1][x1].to_ulong() %2 || board[y2][x2].to_ulong() == 0) && board[y1][x1].to_ulong() %2 == turn) {
-    	board[y2][x2] = board[y1][x1];
-    	board[y1][x1] = 0;
+    int indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
+    int indexTo = IndexFrom2D(move[2] - 'a', move[3] - '1');
+    if (board[indexFrom].to_ulong() > 0 && (board[indexTo].to_ulong() % 2 != board[indexFrom].to_ulong() %2 || board[indexTo].to_ulong() == 0) && board[indexFrom].to_ulong() %2 == turn) {
+    	board[indexTo] = board[indexFrom];
+    	board[indexFrom] = 0;
         return true;  
 	} else {
         return false;
@@ -92,12 +90,12 @@ bool makeMove(const std::string& move) {
 }
 
 int main() {
+    setup();
 	clearScreen();
     printBoard();
 	lastMove("");
 
     turn = false;
-    setup();
 
     while (true) {
         std::string move;
