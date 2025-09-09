@@ -4,6 +4,8 @@
 #include <vector>
 #include <cstdint>
 
+#include "../data/data.h"
+
 void clearScreen() {
     std::cout << "\033[2J\033[1;1H";
 }
@@ -120,6 +122,7 @@ int main() {
         turn = !turn;
         clearScreen();
         printBoard();
+	lastMove(move);
     }
     
     return 0;
