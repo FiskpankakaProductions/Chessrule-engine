@@ -22,6 +22,6 @@ void setup();
 
 void printBoard();
 
-int IndexFrom2D();
+int IndexFrom2D(int x, int y);
 
 #endif

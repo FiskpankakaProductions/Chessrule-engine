@@ -2,6 +2,10 @@
 
 #include "board.h"
 
+int IndexFrom2D(int x, int y) {
+    return y * 8 + x;
+}
+
 char pieceToChar(std::bitset<4> p) {
     switch(p.to_ulong()) {
         case WPAWN: return 'P'; case BPAWN: return 'p';

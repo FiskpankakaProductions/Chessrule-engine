@@ -17,10 +17,6 @@ void lastMove(std::string latestMove) {
 
 bool turn;
 
-int IndexFrom2D(int x, int y) {
-    return y * 8 + x;
-}
-
 void GetPieceMoves(std::vector<uint16_t> &Moves) {
 
 }
