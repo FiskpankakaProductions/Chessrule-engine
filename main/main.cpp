@@ -5,6 +5,7 @@
 #include <cstdint>
 
 #include "../data/data.h"
+#include "board.h"
 
 void clearScreen() {
     std::cout << "\033[2J\033[1;1H";
@@ -16,41 +17,6 @@ void lastMove(std::string latestMove) {
 
 bool turn;
 
-enum Piece : uint8_t {
-    EMPTY = 0,
-    WPAWN = 2, BPAWN = 3,
-    WROOK = 4, BROOK = 5,
-    WKNIGHT = 6, BKNIGHT = 7,
-    WBISHOP = 8, BBISHOP = 9,
-    WQUEEN = 10, BQUEEN = 11,
-    WKING = 12, BKING = 13
-};
-
-std::bitset<4> setupBoard[64] = {
-    WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK,
-    WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN,
-    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-    BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN,
-    BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK
-};
-
-std::vector<std::bitset<6>> PiecesPosistions[2];
-
-std::bitset<4> board[64];
-void setup() {
-    for (int i = 0; i < 64; i++) {
-        board[i] = setupBoard[i];
-    }
-    PiecesPosistions[0].clear();
-    PiecesPosistions[1].clear();
-    for (int i = 0; i < 16; i++) {
-        PiecesPosistions[0].push_back(std::bitset<6>(i)); // White pieces
-        PiecesPosistions[1].push_back(std::bitset<6>(i + 48)); // Black pieces
-    }
-}
 
 
 char pieceToChar(std::bitset<4> p) {
