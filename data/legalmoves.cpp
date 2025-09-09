@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-bool isLegal (int pice, std:string move) {
+bool isLegal (int pice, std::string move) {
 	if (pice % 2 == 0) {
 		if (pice == 2) {
 
@@ -44,4 +44,5 @@ bool isLegal (int pice, std:string move) {
 
 		}
 	}	
+return false;
 }

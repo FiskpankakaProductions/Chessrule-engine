@@ -20,5 +20,8 @@ enum Piece : uint8_t {
 
 void setup();
 
+void printBoard();
+
+int IndexFrom2D();
 
 #endif
