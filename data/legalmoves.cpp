@@ -1,48 +1,30 @@
 #include "data.h"
+#include "../main/board.h"
 
 #include <iostream>
 #include <string>
 
-bool isLegal (int pice, std::string move) {
-	if (pice % 2 == 0) {
-		if (pice == 2) {
+bool isLegal (int piece, std::string move) {
+	switch(piece) {
+		case WPAWN:
+		       return true;
+		case BPAWN:
 			return true;
-		}
-		else if (pice == 4) {
+
+		case WROOK: case BROOK:
 			return true;
-		}
-		else if (pice == 6) {
+
+		case WKNIGHT: case BKNIGHT:
 			return true;
-		}
-		else if (pice == 8) {
+
+		case WBISHOP: case BBISHOP:
 			return true;
-		}
-		else if (pice == 10) {
+
+		case WQUEEN: case BQUEEN:
 			return true;
-		}
-		else if (pice == 12) {
-			return true;
-		}
+
+		case WKING: case BKING:
+			return true;		
 	}
-	else {
-		if (pice == 3) {
-			return true;
-		}
-		else if (pice == 5) {
-			return true;
-		}
-		else if (pice == 7) {
-			return true;
-		}
-		else if (pice == 9) {
-			return true;
-		}
-		else if (pice == 11) {
-			return true;
-		}
-		else if (pice == 13) {
-			return true;
-		}
-	}	
-return false;
+	return false;
 }
