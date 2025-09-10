@@ -3,45 +3,45 @@
 #include <iostream>
 #include <string>
 
-bool isLegal (int pice, std::string move) {
-	if (pice % 2 == 0) {
+bool isLegal (int pice, std::string move, bool turn) {
+	if (pice % 2 == 0 && turn == false) {
 		if (pice == 2) {
-			isCheck();
+			return true;
 		}
 		else if (pice == 4) {
-			isCheck();
+			return true;
 		}
 		else if (pice == 6) {
-			isCheck();
+			return true;
 		}
 		else if (pice == 8) {
-			isCheck();
+			return true;
 		}
 		else if (pice == 10) {
-			isCheck();
+			return true;
 		}
 		else if (pice == 12) {
-			isCheck();
+			return true;
 		}
 	}
 	else {
 		if (pice == 3) {
-			isCheck();
+			return true;
 		}
 		else if (pice == 5) {
-			isCheck();
+			return true;
 		}
 		else if (pice == 7) {
-			isCheck();
+			return true;
 		}
 		else if (pice == 9) {
-			isCheck();
+			return true;
 		}
 		else if (pice == 11) {
-			isCheck();
+			return true;
 		}
 		else if (pice == 13) {
-			isCheck();
+			return true;
 		}
 	}	
 return false;
