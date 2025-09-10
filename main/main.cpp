@@ -29,7 +29,7 @@ bool makeMove(const std::string& move) {
     int indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
     int indexTo = IndexFrom2D(move[2] - 'a', move[3] - '1');
     if (board[indexFrom].to_ulong() > 0 && (board[indexTo].to_ulong() % 2 != board[indexFrom].to_ulong() %2 || board[indexTo].to_ulong() == 0) && board[indexFrom].to_ulong() %2 == turn) {
-	    if (isLegal(2, move, turn) == true) {
+	    if (isLegal(board[indexFrom].to_ulong(), move) == true) {
 		board[indexTo] = board[indexFrom];
     	    	board[indexFrom] = 0;
             	return true;

@@ -3,8 +3,8 @@
 #include <iostream>
 #include <string>
 
-bool isLegal (int pice, std::string move, bool turn) {
-	if (pice % 2 == 0 && turn == false) {
+bool isLegal (int pice, std::string move) {
+	if (pice % 2 == 0) {
 		if (pice == 2) {
 			return true;
 		}
