@@ -14,16 +14,29 @@ bool isLegal (std::string move) {
 	int piece = board[indexFrom].to_ulong();
 	switch(piece) {
 		case WPAWN:
-			if (move[3] - move[1] == 1) {
-				return true;
+			if (move[1] == '2'){
+				if (move[3] - move[1] < 3 && move[0] == move[2]){
+					return true;
+				}
 			} else {
-				return false;
+				if (move[3] - move[1] == 1 && move[0] == move[2]) {
+					return true;
+				} else {
+					return false;
+				}
 			}
+				
 		case BPAWN:
-			if (move[3] - move[1] == -1) {
-				return true;
+			if (move[1] == '7'){
+				if (move[3] - move[1] > -3 && move[0] == move[2]){
+					return true;
+				}
 			} else {
-				return false;
+				if (move[3] - move[1] == -1 && move[0] == move[2]) {
+					return true;
+				} else {
+					return false;
+				}
 			}
 
 		case WROOK: case BROOK:
