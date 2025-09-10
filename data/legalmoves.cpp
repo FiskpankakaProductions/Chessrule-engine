@@ -3,13 +3,28 @@
 
 #include <iostream>
 #include <string>
+#include <bitset>
 
-bool isLegal (int piece, std::string move) {
+bool isLegal (std::string move) {
+	
+	int indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
+    	int indexTo = IndexFrom2D(move[2] - 'a', move[3] - '1');
+
+	
+	int piece = board[indexFrom].to_ulong();
 	switch(piece) {
 		case WPAWN:
-		       return true;
+			if (move[3] - move[1] == 1) {
+				return true;
+			} else {
+				return false;
+			}
 		case BPAWN:
-			return true;
+			if (move[1] - move[3] == 1) {
+				return true;
+			} else {
+				return false;
+			}
 
 		case WROOK: case BROOK:
 			return true;
@@ -24,9 +39,14 @@ bool isLegal (int piece, std::string move) {
 			return true;
 
 		case WKING: case BKING:
-			return true;
+			if (abs(move[0] - move[2]) == 1 || abs(move[1] - move[3]) == 1) {
+				return true;
+			} else {
+				return false;
+			}
 
 		defualt:
 			return false;		
 	}
+	return false;
 }

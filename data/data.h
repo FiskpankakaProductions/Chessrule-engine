@@ -3,7 +3,7 @@
 
 #include <string>
 
-bool isLegal (int pice, std::string move);
+bool isLegal (std::string move);
 bool isCheck();
 
 #endif
