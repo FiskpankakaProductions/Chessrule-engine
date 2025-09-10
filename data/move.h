@@ -1,5 +1,5 @@
-#ifndef data_H
-#define data_H
+#ifndef move_H
+#define move_H
 
 #include <string>
 

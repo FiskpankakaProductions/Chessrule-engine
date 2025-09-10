@@ -1,5 +1,5 @@
-#include "data.h"
-#include "../main/board.h"
+#include "move.h"
+#include "board.h"
 
 #include <iostream>
 #include <string>
@@ -8,7 +8,7 @@
 bool isLegal (std::string move) {
 	
 	int indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
-    	int indexTo = IndexFrom2D(move[2] - 'a', move[3] - '1');
+    int indexTo = IndexFrom2D(move[2] - 'a', move[3] - '1');
 
 	
 	int piece = board[indexFrom].to_ulong();
@@ -20,7 +20,7 @@ bool isLegal (std::string move) {
 				return false;
 			}
 		case BPAWN:
-			if (move[1] - move[3] == 1) {
+			if (move[3] - move[1] == -1) {
 				return true;
 			} else {
 				return false;
@@ -45,8 +45,11 @@ bool isLegal (std::string move) {
 				return false;
 			}
 
-		defualt:
+		default:
 			return false;		
 	}
+	
+}
+bool isCheck() {
 	return false;
 }

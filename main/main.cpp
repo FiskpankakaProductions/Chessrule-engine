@@ -4,8 +4,8 @@
 #include <vector>
 #include <cstdint>
 
-#include "../data/data.h"
-#include "board.h"
+#include "../data/move.h"
+#include "../data/board.h"
 
 void clearScreen() {
     std::cout << "\033[2J\033[1;1H";
