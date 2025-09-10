@@ -21,10 +21,6 @@ void GetPieceMoves(std::vector<uint16_t> &Moves) {
 
 }
 
-void GetLegalMoves(std::vector<uint16_t> &Moves) {
-
-}
-
 bool makeMove(const std::string& move) {
     int indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
     int indexTo = IndexFrom2D(move[2] - 'a', move[3] - '1');

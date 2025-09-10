@@ -24,7 +24,9 @@ bool isLegal (int piece, std::string move) {
 			return true;
 
 		case WKING: case BKING:
-			return true;		
+			return true;
+
+		defualt:
+			return false;		
 	}
-	return false;
 }
