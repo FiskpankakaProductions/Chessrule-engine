@@ -19,65 +19,68 @@ bool makeMove(const std::string& move) {
 
 bool isLegal (int& indexFrom, int& indexTo, const std::string& move) {
 	
-
+	int targetSquare = board[indexTo].to_ulong();
 	if (!(board[indexFrom].to_ulong() > 0 && (board[indexTo].to_ulong() % 2 != board[indexFrom].to_ulong() %2 || board[indexTo].to_ulong() == 0) && board[indexFrom].to_ulong() %2 == turn)) {
 		return false;
 	}
 
 	// int x1 = indexFrom%8, y1 = indexFrom/8, x2 = indexTo%8, y2 = indexTo/8;
 	int piece = board[indexFrom].to_ulong();
+
+	bool Legal = false;
 	switch(piece) {
 		case WPAWN:
-			if (move[1] == '2'){
-				if (move[3] - move[1] < 3 && move[0] == move[2]){
-					return true;
+			if (move[0] == move[2] && targetSquare == EMPTY) {
+				if (move[3] - move[1] == 1) {
+					Legal = true;
+				} else if (move[1] == '2' && move[3] - move[1] == 2 && board[indexFrom + 8] == EMPTY) {
+					Legal = true;
 				}
-			} else {
-				if (move[3] - move[1] == 1 && (move[0] == move[2]+1 || move[0] == move[2]-1 && (indexTo%2 != 0))) {
-					
-				} else if (move[3] - move[1] == 1 && move[0] == move[2]) {
-					return true;
-				} else {
-					return false;
-				}
+			} else if (abs(move[2] - move[0]) == 1 && move[3]-move[1] == 1 && targetSquare != EMPTY) {
+				Legal = true;
 			}
-				
+			break;
 		case BPAWN:
-			if (move[1] == '7'){
-				if (move[3] - move[1] > -3 && move[0] == move[2]){
-					return true;
+			if (move[2] == move[0] && targetSquare == EMPTY ) {
+				if (move[1] - move[3] == 1) {
+					Legal = true;
+				} else if (move[1] == '7' && move[1] - move[3] == 2 && board[indexFrom - 8] == EMPTY) {
+					Legal = true;
 				}
-			} else {
-				if (move[3] - move[1] == -1 && move[0] == move[2]) {
-					return true;
-				} else {
-					return false;
-				}
+			} else if (abs(move[2] - move[0]) == 1 && move[1]-move[3] == 1 && targetSquare != EMPTY) {
+				Legal = true;
 			}
+			break;
 
 		case WROOK: case BROOK:
-			return true;
+			Legal = true;
+			break;
 
 		case WKNIGHT: case BKNIGHT:
-			return true;
+			if ((abs(move[2]-move[0]) == 2 && abs(move[3]-move[1]) == 1) || (abs(move[2]-move[0]) == 1 && abs(move[3]-move[1]) == 2)) {
+				Legal = true;
+			}
+			break;
 
 		case WBISHOP: case BBISHOP:
-			return true;
+			Legal = true;
+			break;
 
 		case WQUEEN: case BQUEEN:
-			return true;
+			Legal = true;
+			break;
 
 		case WKING: case BKING:
-			if (abs(move[0] - move[2]) == 1 || abs(move[1] - move[3]) == 1) {
-				return true;
-			} else {
-				return false;
+			if (abs(move[2]-move[0]) <= 1 && abs(move[3]-move[1]) <= 1) {
+				Legal = true;
 			}
+			break;
 
 		default:
-			return false;		
+			Legal = false;
+			break;		
 	}
-	
+	return Legal;
 }
 
 bool isCheck() {
