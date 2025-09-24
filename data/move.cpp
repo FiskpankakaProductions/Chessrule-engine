@@ -56,14 +56,26 @@ bool isLegal (int& indexFrom, int& indexTo, const std::string& move) {
 			if (move[0] == move[2]) {
 				int distance = move[1] - move[3];
 				int increment = distance/abs(distance);
-				for (int i = increment; i != distance; i+=increment) {
-					if (!board[indexFrom + increment*8].to_ulong() == EMPTY) {
+				Legal = true;
+				for (int i = increment; i != distance+1; i+=increment) {	
+					if (board[indexFrom + i].to_ulong() != EMPTY) {
+						Legal = false;
 						break;						
 					}
-					Legal = true;				
+									
 				}
 			
 					
+			} else if (move[1] == move[3]) {
+				int distance = move[0] - move[2];
+				int increment = distance/abs(distance);
+				Legal = true;
+				for (int i = increment; i != distance+1; i+=increment) {
+					if (board[indexFrom + i*8].to_ulong() != EMPTY) {
+						Legal = false;
+						break;
+					}
+				}
 			}
 			break;
 
