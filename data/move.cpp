@@ -6,27 +6,25 @@
 #include <bitset>
 
 bool makeMove(const std::string& move) {
-    int indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
-    int indexTo = IndexFrom2D(move[2] - 'a', move[3] - '1');
-    if (board[indexFrom].to_ulong() > 0 && (board[indexTo].to_ulong() % 2 != board[indexFrom].to_ulong() %2 || board[indexTo].to_ulong() == 0) && board[indexFrom].to_ulong() %2 == turn) {
-	    if (isLegal(move) == true) {
-		board[indexTo] = board[indexFrom];
-    	    	board[indexFrom] = 0;
-            	return true;
-	    } else {
-		    return false;
-	    }
-    } else {
-        return false;
-    }
-}
-
-bool isLegal (std::string move) {
-	
 	int indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
     int indexTo = IndexFrom2D(move[2] - 'a', move[3] - '1');
+	if (!isLegal(indexFrom, indexTo, move)) {
+		return false;
+	} else {
+		board[indexTo] = board[indexFrom];
+		board[indexFrom] = EMPTY;
+		return true;
+	}
+}
 
+bool isLegal (int& indexFrom, int& indexTo, const std::string& move) {
 	
+
+	if (!(board[indexFrom].to_ulong() > 0 && (board[indexTo].to_ulong() % 2 != board[indexFrom].to_ulong() %2 || board[indexTo].to_ulong() == 0) && board[indexFrom].to_ulong() %2 == turn)) {
+		return false;
+	}
+
+	// int x1 = indexFrom%8, y1 = indexFrom/8, x2 = indexTo%8, y2 = indexTo/8;
 	int piece = board[indexFrom].to_ulong();
 	switch(piece) {
 		case WPAWN:
