@@ -53,7 +53,18 @@ bool isLegal (int& indexFrom, int& indexTo, const std::string& move) {
 			break;
 
 		case WROOK: case BROOK:
-			Legal = true;
+			if (move[0] == move[2]) {
+				int distance = move[1] - move[3];
+				int increment = distance/abs(distance);
+				for (int i = increment; i != distance; i+=increment) {
+					if (!board[indexFrom + increment*8].to_ulong() == EMPTY) {
+						break;						
+					}
+					Legal = true;				
+				}
+			
+					
+			}
 			break;
 
 		case WKNIGHT: case BKNIGHT:
