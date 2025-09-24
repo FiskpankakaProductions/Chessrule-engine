@@ -5,6 +5,22 @@
 #include <string>
 #include <bitset>
 
+bool makeMove(const std::string& move) {
+    int indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
+    int indexTo = IndexFrom2D(move[2] - 'a', move[3] - '1');
+    if (board[indexFrom].to_ulong() > 0 && (board[indexTo].to_ulong() % 2 != board[indexFrom].to_ulong() %2 || board[indexTo].to_ulong() == 0) && board[indexFrom].to_ulong() %2 == turn) {
+	    if (isLegal(move) == true) {
+		board[indexTo] = board[indexFrom];
+    	    	board[indexFrom] = 0;
+            	return true;
+	    } else {
+		    return false;
+	    }
+    } else {
+        return false;
+    }
+}
+
 bool isLegal (std::string move) {
 	
 	int indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
@@ -19,7 +35,9 @@ bool isLegal (std::string move) {
 					return true;
 				}
 			} else {
-				if (move[3] - move[1] == 1 && move[0] == move[2]) {
+				if (move[3] - move[1] == 1 && (move[0] == move[2]+1 || move[0] == move[2]-1 && (indexTo%2 != 0))) {
+					
+				} else if (move[3] - move[1] == 1 && move[0] == move[2]) {
 					return true;
 				} else {
 					return false;
@@ -63,6 +81,11 @@ bool isLegal (std::string move) {
 	}
 	
 }
+
 bool isCheck() {
+	return false;
+}
+
+bool isCheckmate() {
 	return false;
 }
