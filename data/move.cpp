@@ -53,29 +53,39 @@ bool isLegal (int& indexFrom, int& indexTo, const std::string& move) {
 			break;
 
 		case WROOK: case BROOK:
-			if (move[0] == move[2]) {
+			if (move[0] == move[2] && move[1] != move[3]) {
 				int distance = move[1] - move[3];
 				int increment = distance/abs(distance);
 				Legal = true;
 				for (int i = increment; i != distance+1; i+=increment) {	
 					if (board[indexFrom + i].to_ulong() != EMPTY) {
-						Legal = false;
-						break;						
+						if(indexFrom + i == indexTo && board[indexFrom + i].to_ulong()%2 != piece%2) {
+							Legal = true;
+							break;
+						} else {
+							Legal = false;
+							break;
+						}
 					}
 									
 				}
 			
 					
-			} else if (move[1] == move[3]) {
+			} else if (move[1] == move[3] && move[0] != move[2]) {
 				int distance = move[0] - move[2];
 				int increment = distance/abs(distance);
 				Legal = true;
-				for (int i = increment; i != distance+1; i+=increment) {
+				for (int i = increment; i != distance+1; i+=increment) {	
 					if (board[indexFrom + i*8].to_ulong() != EMPTY) {
-						Legal = false;
-						break;
-					}
+						if(indexFrom + i*8 == indexTo && board[indexFrom + i].to_ulong()%2 != piece%2) {
+							Legal = true;
+							break;
+						} else {
+							Legal = false;
+							break;
+						}
 				}
+			}
 			}
 			break;
 
