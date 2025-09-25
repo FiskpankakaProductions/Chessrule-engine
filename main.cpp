@@ -13,35 +13,33 @@ void clearScreen() {
     std::cout << "\033[2J\033[1;1H";
 }
 
-void lastMove(std::string latestMove) {
-	std::cout << "Last move: " << latestMove << "\n";
+void lastMove(const std::string& latestMove) {
+    std::cout << "Last move: " << latestMove << "\n";
 }
 
 int main() {
     setup();
-    clearScreen();
-    printBoard();
-    lastMove("");
-
-	turn = false;    
-
+    turn = false;
+    std::string LastMove = "";
     while (true) {
-        std::string move;
-        std::cin >> move;
-	if (move == "q") {
-                break;
-        }
-	else if (!makeMove(move)){
-                clearScreen();
-                printBoard();
-                std::cout << "Invalid input \n";
-                continue;
-        }
-        turn = !turn;
         clearScreen();
         printBoard();
-	lastMove(move);
+        lastMove(LastMove);
+
+        std::string move;
+        std::getline(std::cin, move);
+
+        if (move.empty()) continue;
+        if (move == "q") break;
+
+       if (!makeMove(move)) {
+            std::cout << "Invalid input. Press Enter to continue...\n";
+            std::cin.get();
+            continue;
+       }
+        LastMove = move;
+        turn = !turn;
     }
-    
+
     return 0;
 }
