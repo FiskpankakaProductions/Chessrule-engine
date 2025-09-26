@@ -24,6 +24,9 @@ int main() {
     while (true) {
         clearScreen();
         printBoard();
+        if (isCheck()) {
+            std::cout << "Check!\n";
+        }
         lastMove(LastMove);
 
         std::string move;
@@ -39,6 +42,19 @@ int main() {
        }
         LastMove = move;
         turn = !turn;
+        if (isCheckmate()) {
+            if (isCheck()) {
+                clearScreen();
+                printBoard();
+                std::cout << "Checkmate! " << (turn ? "White" : "Black") << " wins!\n";
+                break;
+            } else {
+                clearScreen();
+                printBoard();
+                std::cout << "Stalemate! It's a draw!\n";
+                break;
+            }
+        }
     }
 
     return 0;

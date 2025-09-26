@@ -224,5 +224,21 @@ bool isCheck() {
 }
 
 bool isCheckmate() {
-	return false;
+	for (int i = 0; i < 64; i++) {
+        if (board[i].to_ulong() % 2 == turn) {
+            for (int j = 0; j < 64; j++) {
+                if (i != j && (board[j].to_ulong() % 2 != turn || board[j].to_ulong() == EMPTY)) {
+                    std::string move = "";
+                    move += ('a' + (i % 8));
+                    move += ('1' + (i / 8));
+                    move += ('a' + (j % 8));
+                    move += ('1' + (j / 8));
+                    if (isLegal(i, j, move)) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return true;
 }
