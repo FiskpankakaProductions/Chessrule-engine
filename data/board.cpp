@@ -6,8 +6,6 @@
 
 #include "board.h"
 
-
-
 std::bitset<4> setupBoard[64] = {
     WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING, WBISHOP, WKNIGHT, WROOK,
     WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN, WPAWN,
@@ -18,6 +16,12 @@ std::bitset<4> setupBoard[64] = {
     BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN, BPAWN,
     BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK
 };
+
+std::string LastMove = "";
+
+void lastMove(const std::string& latestMove) {
+    std::cout << "Last move: " << latestMove << "\n";
+}
 
 
 int IndexFrom2D(int x, int y) {

@@ -5,8 +5,10 @@
 #include <vector>
 #include <cstdint>
 
-// Only a declaration here
 extern std::bitset<4> board[64];
+
+extern std::string LastMove;
+void lastMove(const std::string& latestMove);
 
 enum Piece : uint8_t {
     EMPTY = 0,

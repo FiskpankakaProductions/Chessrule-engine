@@ -13,14 +13,10 @@ void clearScreen() {
     std::cout << "\033[2J\033[1;1H";
 }
 
-void lastMove(const std::string& latestMove) {
-    std::cout << "Last move: " << latestMove << "\n";
-}
-
 int main() {
     setup();
     turn = false;
-    std::string LastMove = "";
+    LastMove = "";
     while (true) {
         clearScreen();
         printBoard();
