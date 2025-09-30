@@ -26,4 +26,8 @@ void printBoard();
 
 int IndexFrom2D(int x, int y);
 
+int charToPiece(char c);
+
+extern std::bitset<4> CastelingRights;
+
 #endif

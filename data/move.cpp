@@ -5,21 +5,94 @@
 #include <string>
 #include <bitset>
 
+int FindKing() {
+	for (int i = 0; i < 64; i++) {
+		if (board[i].to_ulong() == (turn == false ? WKING : BKING)) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 bool makeMove(const std::string& move) {
-	int indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
+    if (move == "O-O" || move == "O-O-O") {
+        if (isCheck()) return false;
+        if (move == "O-O" && (turn ? CastelingRights[2] : CastelingRights[0])) {
+            int kingindex = FindKing();
+            if (kingindex == -1) return false;
+            if (board[kingindex + 1].to_ulong() != EMPTY || board[kingindex+2].to_ulong() != EMPTY) return false;
+            board[kingindex + 1] = board[kingindex];
+            board[kingindex] = EMPTY;
+            if (isCheck()) {
+                board[kingindex] = board[kingindex + 1];
+                board[kingindex + 1] = EMPTY;
+                return false;
+            }
+            board[kingindex + 2] = board[kingindex + 1];
+            board[kingindex + 1] = EMPTY;
+            if (isCheck()) {
+                board[kingindex] = board[kingindex + 2];
+                board[kingindex + 2] = EMPTY;
+                return false;
+            }
+            board[kingindex + 1] = board[kingindex+3];
+            board[kingindex + 3] = EMPTY;
+        } else if (move == "O-O-O" && (turn ? CastelingRights[3] : CastelingRights[1])) {
+            int kingindex = FindKing();
+            if (kingindex == -1) return false;
+            if (board[kingindex - 1].to_ulong() != EMPTY || board[kingindex-2].to_ulong() != EMPTY) return false;
+            board[kingindex - 1] = board[kingindex];
+            board[kingindex] = EMPTY;
+            if (isCheck()) {
+                board[kingindex] = board[kingindex - 1];
+                board[kingindex - 1] = EMPTY;
+                return false;
+            }
+            board[kingindex - 2] = board[kingindex - 1];
+            board[kingindex - 1] = EMPTY;
+            if (isCheck()) {
+                board[kingindex] = board[kingindex - 2];
+                board[kingindex - 2] = EMPTY;
+                return false;
+            }
+            board[kingindex - 1] = board[kingindex-4];
+            board[kingindex - 4] = EMPTY; 
+        }
+        if (turn) { CastelingRights[2] = CastelingRights[3] = false; }
+        else { CastelingRights[0] = CastelingRights[1] = false; }
+        return true;
+    }
+
+    int indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
     int indexTo = IndexFrom2D(move[2] - 'a', move[3] - '1');
+
 	if (!isLegal(indexFrom, indexTo, move)) {
 		return false;
 	} else {
 		board[indexTo] = board[indexFrom];
 		board[indexFrom] = EMPTY;
+
+        int piece = board[indexTo].to_ulong();
+
+        if (move.size() == 5 && piece == (turn ? BPAWN : WPAWN)) board[indexTo] = charToPiece(move[4]) + (turn ? 1 : 0);
+        if (piece == WROOK) {
+            if (indexTo%8 == 0) CastelingRights[0] = false;
+            if (indexTo%8 == 7) CastelingRights[1] = false;
+        }
+        if (piece == BROOK) {
+            if (indexTo%8 == 0) CastelingRights[2] = false;
+            if (indexTo%8 == 7) CastelingRights[3] = false;
+        }
+        if (piece == WKING) { CastelingRights[0] = CastelingRights[1] = false; }
+        if (piece == BKING) { CastelingRights[2] = CastelingRights[3] = false; }
+        
+
 		return true;
 	}
 }
 
 bool isLegal(int& indexFrom, int& indexTo, const std::string& move) {
-	// Jag la till detta för tillfället, det kommer behövas ändras med promotions och casteling.
-    if (move.size() != 4) return false;
+    if (move.size() != 4 && move.size() != 5) return false;
 	if (move[0] < 'a' || move[0] > 'h') return false;
 	if (move[2] < 'a' || move[2] > 'h') return false;
 	if (move[1] < '1' || move[1] > '8') return false;
@@ -43,6 +116,26 @@ bool isLegal(int& indexFrom, int& indexTo, const std::string& move) {
                 else if (y1 == 1 && y2 - y1 == 2 && board[indexFrom + 8] == EMPTY) Legal = true;
             } else if (abs(x2 - x1) == 1 && y2 - y1 == 1 && targetSquare != EMPTY) {
                 Legal = true;
+            } else if (y2 == 5 && abs(x2-x1) == 1 && y2 - y1 == 1 && targetSquare == EMPTY) {
+                if (board[indexTo - 8].to_ulong() == BPAWN && indexTo - 8 == IndexFrom2D(LastMove[2] - 'a', LastMove[3] - '1')) {
+                    auto temp = board[indexTo - 8];
+                    board[indexTo - 8] = EMPTY;
+                    board[indexTo] = board[indexFrom];
+                    board[indexFrom] = EMPTY;
+                    bool KinginCheck = isCheck();
+                    board[indexFrom] = board[indexTo];
+                    board[indexTo] = EMPTY;
+                    if (!KinginCheck) {
+                        return true;
+                    } else {
+                        board[indexTo - 8] = temp;
+                        return false;
+                    }
+                }
+            }
+            if (y2 == 7) {
+                if (move.size() != 5) Legal = false;
+                else if (move[4] != 'Q' && move[4] != 'R' && move[4] != 'B' && move[4] != 'N') Legal = false;;
             }
             break;
 
@@ -52,6 +145,26 @@ bool isLegal(int& indexFrom, int& indexTo, const std::string& move) {
                 else if (y1 == 6 && y1 - y2 == 2 && board[indexFrom - 8] == EMPTY) Legal = true;
             } else if (abs(x2 - x1) == 1 && y1 - y2 == 1 && targetSquare != EMPTY) {
                 Legal = true;
+            } else if (y2 == 2 && abs(x2-x1) == 1 && y1 - y2 == 1 && targetSquare == EMPTY) {
+                if (board[indexTo + 8].to_ulong() == WPAWN && indexTo + 8 == IndexFrom2D(LastMove[2] - 'a', LastMove[3] - '1')) {
+                    auto temp = board[indexTo + 8];
+                    board[indexTo + 8] = EMPTY;
+                    board[indexTo] = board[indexFrom];
+                    board[indexFrom] = EMPTY;
+                    bool KinginCheck = isCheck();
+                    board[indexFrom] = board[indexTo];
+                    board[indexTo] = EMPTY;
+                    if (!KinginCheck) {
+                        return true;
+                    } else {
+                        board[indexTo + 8] = temp;
+                        return false;
+                    }
+                }
+            }
+            if (y2 == 0) {
+                if (move.size() != 5) Legal = false;
+                else if (move[4] != 'Q' && move[4] != 'R' && move[4] != 'B' && move[4] != 'N') Legal = false;;
             }
             break;
 
@@ -139,16 +252,6 @@ bool isLegal(int& indexFrom, int& indexTo, const std::string& move) {
     return true;
 }
 
-int FindKing() {
-	for (int i = 0; i < 64; i++) {
-		if (board[i].to_ulong() == (turn == false ? WKING : BKING)) {
-			return i;
-		}
-	}
-	return -1;
-}
-
-
 bool isCheck() {
     int kingPos = FindKing();
     if (kingPos == -1) return false;
@@ -224,21 +327,28 @@ bool isCheck() {
 }
 
 bool isCheckmate() {
-	for (int i = 0; i < 64; i++) {
-        if (board[i].to_ulong() % 2 == turn) {
-            for (int j = 0; j < 64; j++) {
-                if (i != j && (board[j].to_ulong() % 2 != turn || board[j].to_ulong() == EMPTY)) {
-                    std::string move = "";
-                    move += ('a' + (i % 8));
-                    move += ('1' + (i / 8));
-                    move += ('a' + (j % 8));
-                    move += ('1' + (j / 8));
-                    if (isLegal(i, j, move)) {
-                        return false;
-                    }
-                }
+    for (int from = 0; from < 64; from++) {
+        int piece = board[from].to_ulong();
+
+        if (piece == EMPTY || piece % 2 != turn) continue;
+
+        for (int to = 0; to < 64; to++) {
+            if (from == to) continue;
+
+            int target = board[to].to_ulong();
+            if (target != EMPTY && target % 2 == turn) continue;
+
+            std::string move = "";
+            move += ('a' + (from % 8));
+            move += ('1' + (from / 8));
+            move += ('a' + (to % 8));
+            move += ('1' + (to / 8));
+
+            if (isLegal(from, to, move)) {
+                return false;
             }
         }
     }
     return true;
 }
+

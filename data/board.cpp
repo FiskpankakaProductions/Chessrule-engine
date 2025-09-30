@@ -17,6 +17,8 @@ std::bitset<4> setupBoard[64] = {
     BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING, BBISHOP, BKNIGHT, BROOK
 };
 
+std::bitset<4> CastelingRights = 0b1111;
+
 std::string LastMove = "";
 
 void lastMove(const std::string& latestMove) {
@@ -37,6 +39,18 @@ char pieceToChar(std::bitset<4> p) {
         case WQUEEN: return 'Q'; case BQUEEN: return 'q';
         case WKING: return 'K'; case BKING: return 'k';
         default: return '.';
+    }
+}
+
+int charToPiece(char c) {
+    switch(c) {
+        case 'P': return WPAWN; case 'p': return BPAWN;
+        case 'R': return WROOK; case 'r': return BROOK;
+        case 'N': return WKNIGHT; case 'n': return BKNIGHT;
+        case 'B': return WBISHOP; case 'b': return BBISHOP;
+        case 'Q': return WQUEEN; case 'q': return BQUEEN;
+        case 'K': return WKING; case 'k': return BKING;
+        default: return EMPTY;
     }
 }
 
