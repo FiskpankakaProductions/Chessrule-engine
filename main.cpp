@@ -6,6 +6,7 @@
 
 #include "data/board.h"
 #include "data/move.h"
+#include "data/sendData.h"
 
 bool turn;
 
@@ -38,6 +39,7 @@ int main() {
        }
         LastMove = move;
         turn = !turn;
+	sendBoard();
         if (isCheckmate()) {
             if (isCheck()) {
                 clearScreen();
