@@ -16,6 +16,7 @@ void clearScreen() {
 
 int main() {
     setup();
+    sendBoard();
     turn = false;
     LastMove = "";
     while (true) {
