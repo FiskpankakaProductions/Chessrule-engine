@@ -36,13 +36,13 @@ def board():
             if event.type == pygame.QUIT:
                 running = False
 
-        # Load and parse the board file
         with open("../../board.txt", "r") as f:
             content = [line.strip().split() for line in f.readlines()]
 
+        content.reverse()
+
         screen.fill(backgroundcolor)
 
-        # Draw the board and pieces
         for row in range(rows):
             for col in range(cols):
                 color = light_square if (row + col) % 2 == 0 else dark_square
