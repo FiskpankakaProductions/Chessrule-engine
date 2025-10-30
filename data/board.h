@@ -13,9 +13,9 @@ void lastMove(const std::string& latestMove);
 enum Piece : uint8_t {
     EMPTY = 0,
     WPAWN = 2, BPAWN = 3,
-    WROOK = 4, BROOK = 5,
-    WKNIGHT = 6, BKNIGHT = 7,
-    WBISHOP = 8, BBISHOP = 9,
+    WKNIGHT = 4, BKNIGHT = 5,
+    WBISHOP = 6, BBISHOP = 7,
+    WROOK = 8, BROOK = 9,
     WQUEEN = 10, BQUEEN = 11,
     WKING = 12, BKING = 13
 };
