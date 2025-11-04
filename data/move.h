@@ -5,9 +5,9 @@
 
 extern bool turn;
 
-bool makeMove(const std::string& move);
+bool makeMove(std::string& move);
 int isLegal (int& indexFrom, int& indexTo, const std::string& move);
 bool isCheck();
-bool isCheckmate();
+bool hasLegalMoves();
 
 #endif

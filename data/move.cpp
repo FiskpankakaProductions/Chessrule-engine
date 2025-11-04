@@ -14,9 +14,29 @@ int FindKing() {
 	return -1;
 }
 
-bool makeMove(const std::string& move) {
-    int indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
-    int indexTo = IndexFrom2D(move[2] - 'a', move[3] - '1');
+std::string translateInputString(const std::string& input) {
+    if (input == "O-O" || input == "o-o" || input == "0-0") {
+        return "O-O";
+    } else if (input == "O-O-O" || input == "o-o-o" || input == "0-0-0") {
+        return "O-O-O";
+    } else if (input.length() == 2) {
+        return "e2" + input;
+    }
+    return input;
+}
+
+bool makeMove(std::string& move) {
+
+    move = translateInputString(move);
+    int indexFrom, indexTo;
+    if (move == "O-O" || move == "O-O-O") {
+        indexFrom = -1;
+        indexTo = -1;
+    } else if (move.length() == 4 && move.length() == 5) {
+        indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
+        indexTo = IndexFrom2D(move[2] - 'a', move[3] - '1');
+    } else return false;
+
 
     int MoveType = isLegal(indexFrom, indexTo, move);
 
@@ -50,6 +70,7 @@ bool makeMove(const std::string& move) {
             board[kingindex + 1] = board[kingindex + 3];
             board[kingindex] = EMPTY; 
             board[kingindex + 3] = EMPTY;
+            turn ? CastelingRights[2] = CastelingRights[3] = false : CastelingRights[0] = CastelingRights[1];
             return true;
         }
         case 4: {
@@ -65,7 +86,6 @@ bool makeMove(const std::string& move) {
             board[indexTo] = board[indexFrom];
 		    board[indexFrom] = EMPTY;
             board[indexTo] = charToPiece(move[4]) + (turn ? 1 : 0);
-            turn ? CastelingRights[2] = CastelingRights[3] = false : CastelingRights[0] = CastelingRights[1];
             return true;
         }
         default: {
@@ -123,13 +143,6 @@ int isLegal(int& indexFrom, int& indexTo, const std::string& move) {
         }
         return 0;
     }
-
-    if (move.size() != 4 && move.size() != 5) return 0;
-	if (move[0] < 'a' || move[0] > 'h') return 0;
-	if (move[2] < 'a' || move[2] > 'h') return 0;
-	if (move[1] < '1' || move[1] > '8') return 0;
-	if (move[3] < '1' || move[3] > '8') return 0;
-
 
 	int targetSquare = board[indexTo].to_ulong();
 	int piece = board[indexFrom].to_ulong();
@@ -352,7 +365,7 @@ bool isCheck() {
     return false;
 }
 
-bool isCheckmate() {
+bool hasLegalMoves() {
     for (int from = 0; from < 64; from++) {
         int piece = board[from].to_ulong();
 

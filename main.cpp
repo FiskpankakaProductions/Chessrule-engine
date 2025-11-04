@@ -40,8 +40,8 @@ int main() {
        }
         LastMove = move;
         turn = !turn;
-	sendBoard();
-        if (isCheckmate()) {
+	    sendBoard();
+        if (hasLegalMoves()) {
             if (isCheck()) {
                 clearScreen();
                 printBoard();
