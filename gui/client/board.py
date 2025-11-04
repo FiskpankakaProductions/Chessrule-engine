@@ -16,16 +16,16 @@ def board():
 
     pice_asset = {
         "2": pygame.image.load("assets/pieces/wP.png"),
-        "4": pygame.image.load("assets/pieces/wR.png"),
-        "6": pygame.image.load("assets/pieces/wN.png"),
-        "8": pygame.image.load("assets/pieces/wB.png"),
+        "4": pygame.image.load("assets/pieces/wN.png"),
+        "6": pygame.image.load("assets/pieces/wB.png"),
+        "8": pygame.image.load("assets/pieces/wR.png"),
         "10": pygame.image.load("assets/pieces/wQ.png"),
         "12": pygame.image.load("assets/pieces/wK.png"),
 
         "3": pygame.image.load("assets/pieces/bP.png"),
-        "5": pygame.image.load("assets/pieces/bR.png"),
-        "7": pygame.image.load("assets/pieces/bN.png"),
-        "9": pygame.image.load("assets/pieces/bB.png"),
+        "5": pygame.image.load("assets/pieces/bN.png"),
+        "7": pygame.image.load("assets/pieces/bB.png"),
+        "9": pygame.image.load("assets/pieces/bR.png"),
         "11": pygame.image.load("assets/pieces/bQ.png"),
         "13": pygame.image.load("assets/pieces/bK.png"),
     }
