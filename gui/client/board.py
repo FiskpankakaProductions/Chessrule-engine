@@ -34,7 +34,7 @@ def board():
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                running = False 
 
         with open("../../board.txt", "r") as f:
             content = [line.strip().split() for line in f.readlines()]
