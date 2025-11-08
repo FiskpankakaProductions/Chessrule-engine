@@ -41,7 +41,16 @@ bool makeMove(std::string& move) {
     int MoveType = isLegal(indexFrom, indexTo, move);
 
     switch (MoveType) {
+        case 0: {
+            return false;
+        }
         case 1: {
+            if (board[indexTo].to_ulong() != EMPTY) {
+                MoveSinceLastCaptureOrPawnMove = 0;
+            } else {
+                MoveSinceLastCaptureOrPawnMove++;
+            }
+
             board[indexTo] = board[indexFrom];
 		    board[indexFrom] = EMPTY;
 
@@ -59,12 +68,14 @@ bool makeMove(std::string& move) {
             return true;
         }
         case 2: {
+            MoveSinceLastCaptureOrPawnMove = 0;
             board[indexTo] = board[indexFrom];
             board[indexFrom] = EMPTY;
             board[turn ? indexTo + 8 : indexTo - 8] = EMPTY;
             return true;
         }
         case 3: {
+            MoveSinceLastCaptureOrPawnMove++;
             int kingindex = FindKing();
             board[kingindex + 2] = board[kingindex];
             board[kingindex + 1] = board[kingindex + 3];
@@ -74,6 +85,7 @@ bool makeMove(std::string& move) {
             return true;
         }
         case 4: {
+            MoveSinceLastCaptureOrPawnMove++;
             int kingindex = FindKing();
             board[kingindex - 2] = board[kingindex];
             board[kingindex - 1] = board[kingindex - 4];
@@ -83,6 +95,7 @@ bool makeMove(std::string& move) {
             return true;
         }
         case 5: {
+            MoveSinceLastCaptureOrPawnMove = 0;
             board[indexTo] = board[indexFrom];
 		    board[indexFrom] = EMPTY;
             board[indexTo] = charToPiece(move[4]) + (turn ? 1 : 0);
@@ -97,58 +110,58 @@ bool makeMove(std::string& move) {
 int isLegal(int& indexFrom, int& indexTo, const std::string& move) {
 
     if (move == "O-O" || move == "O-O-O") {
-        if (isCheck()) return 0;
+        if (isCheck()) return -1;
         if (move == "O-O" && (turn ? CastelingRights[2] : CastelingRights[0])) {
             int kingindex = FindKing();
-            if (kingindex == -1) return 0;
-            if (board[kingindex + 3] != (turn ? BROOK : WROOK)) return 0;
-            if (board[kingindex + 1].to_ulong() != EMPTY || board[kingindex+2].to_ulong() != EMPTY) return 0;
+            if (kingindex == -1) return -1;
+            if (board[kingindex + 3] != (turn ? BROOK : WROOK)) return -1;
+            if (board[kingindex + 1].to_ulong() != EMPTY || board[kingindex+2].to_ulong() != EMPTY) return -1;
             board[kingindex + 1] = board[kingindex];
             board[kingindex] = EMPTY;
             if (isCheck()) {
-                return 0;
+                return -1;
             }
             board[kingindex + 2] = board[kingindex + 1];
             board[kingindex + 1] = EMPTY;
             if (isCheck()) {
                 board[kingindex] = board[kingindex + 2];
                 board[kingindex + 2] = EMPTY;
-                return 0;
+                return -1;
             }
             board[kingindex] = board[kingindex + 2];
             board[kingindex + 2] = EMPTY;
             return 3;
         } else if (move == "O-O-O" && (turn ? CastelingRights[3] : CastelingRights[1])) {
             int kingindex = FindKing();
-            if (kingindex == -1) return 0;
-            if (board[kingindex - 4] != (turn ? BROOK : WROOK)) return 0;
-            if (board[kingindex - 1].to_ulong() != EMPTY || board[kingindex-2].to_ulong() != EMPTY || board[kingindex-3] != EMPTY) return 0;
+            if (kingindex == -1) return -1;
+            if (board[kingindex - 4] != (turn ? BROOK : WROOK)) return -1;
+            if (board[kingindex - 1].to_ulong() != EMPTY || board[kingindex-2].to_ulong() != EMPTY || board[kingindex-3] != EMPTY) return -1;
             board[kingindex - 1] = board[kingindex];
             board[kingindex] = EMPTY;
             if (isCheck()) {
                 board[kingindex] = board[kingindex - 1];
                 board[kingindex - 1] = EMPTY;
-                return 0;
+                return -1;
             }
             board[kingindex - 2] = board[kingindex - 1];
             board[kingindex - 1] = EMPTY;
             if (isCheck()) {
                 board[kingindex] = board[kingindex - 2];
                 board[kingindex - 2] = EMPTY;
-                return 0;
+                return -1;
             }
             board[kingindex] = board[kingindex - 2];
             board[kingindex - 2] = EMPTY;
             return 4;
         }
-        return 0;
+        return -1;
     }
 
 	int targetSquare = board[indexTo].to_ulong();
 	int piece = board[indexFrom].to_ulong();
 
 
-	if (!(piece > 0 && (targetSquare % 2 != piece % 2 || targetSquare == EMPTY) && piece % 2 == turn)) return 0;
+	if (!(piece > 0 && (targetSquare % 2 != piece % 2 || targetSquare == EMPTY) && piece % 2 == turn)) return -1;
 
     bool Legal = false;
     int x1 = indexFrom % 8, y1 = indexFrom / 8;
@@ -171,12 +184,12 @@ int isLegal(int& indexFrom, int& indexTo, const std::string& move) {
                     board[indexFrom] = board[indexTo];
                     board[indexTo] = EMPTY;
                     board[indexTo - 8] = temp;
-                    return KinginCheck ? 0 : 2;
+                    return KinginCheck ? -1 : 2;
                 }
             }
             if (y2 == 7) {
-                if (move.size() != 5) return 0;
-                else if (move[4] != 'Q' && move[4] != 'R' && move[4] != 'B' && move[4] != 'N') return 0;
+                if (move.size() != 5) return -1;
+                else if (move[4] != 'Q' && move[4] != 'R' && move[4] != 'B' && move[4] != 'N') return -1;
                 return 5;
             }
             break;
@@ -197,12 +210,12 @@ int isLegal(int& indexFrom, int& indexTo, const std::string& move) {
                     board[indexFrom] = board[indexTo];
                     board[indexTo] = EMPTY;
                     board[indexTo + 8] = temp;
-                    return KinginCheck ? 0 : 2;
+                    return KinginCheck ? -1 : 2;
                 }
             }
             if (y2 == 0) {
-                if (move.size() != 5) return 0;
-                else if (move[4] != 'Q' && move[4] != 'R' && move[4] != 'B' && move[4] != 'N') return 0;
+                if (move.size() != 5) return -1;
+                else if (move[4] != 'Q' && move[4] != 'R' && move[4] != 'B' && move[4] != 'N') return -1;
                 return 5;
             }
             break;
@@ -211,13 +224,13 @@ int isLegal(int& indexFrom, int& indexTo, const std::string& move) {
             if (x1 == x2) {
                 int step = (y2 > y1) ? 8 : -8;
                 for (int pos = indexFrom + step; pos != indexTo; pos += step) {
-                    if (board[pos].to_ulong() != EMPTY) return 0;
+                    if (board[pos].to_ulong() != EMPTY) return -1;
                 }
                 Legal = true;
             } else if (y1 == y2) {
                 int step = (x2 > x1) ? 1 : -1;
                 for (int pos = indexFrom + step; pos != indexTo; pos += step) {
-                    if (board[pos].to_ulong() != EMPTY) return 0;
+                    if (board[pos].to_ulong() != EMPTY) return -1;
                 }
                 Legal = true;
             }
@@ -235,7 +248,7 @@ int isLegal(int& indexFrom, int& indexTo, const std::string& move) {
                 int stepY = (y2 > y1) ? 8 : -8;
                 int step = stepX + stepY;
                 for (int pos = indexFrom + step; pos != indexTo; pos += step) {
-                    if (board[pos].to_ulong() != EMPTY) return 0;
+                    if (board[pos].to_ulong() != EMPTY) return -1;
                 }
                 Legal = true;
             }
@@ -245,13 +258,13 @@ int isLegal(int& indexFrom, int& indexTo, const std::string& move) {
             if (x1 == x2) {
                 int step = (y2 > y1) ? 8 : -8;
                 for (int pos = indexFrom + step; pos != indexTo; pos += step) {
-                    if (board[pos].to_ulong() != EMPTY) return 0;
+                    if (board[pos].to_ulong() != EMPTY) return -1;
                 }
                 Legal = true;
             } else if (y1 == y2) {
                 int step = (x2 > x1) ? 1 : -1;
                 for (int pos = indexFrom + step; pos != indexTo; pos += step) {
-                    if (board[pos].to_ulong() != EMPTY) return 0;
+                    if (board[pos].to_ulong() != EMPTY) return -1;
                 }
                 Legal = true;
             } else if (abs(x2 - x1) == abs(y2 - y1)) {
@@ -259,7 +272,7 @@ int isLegal(int& indexFrom, int& indexTo, const std::string& move) {
                 int stepY = (y2 > y1) ? 8 : -8;
                 int step = stepX + stepY;
                 for (int pos = indexFrom + step; pos != indexTo; pos += step) {
-                    if (board[pos].to_ulong() != EMPTY) return 0;
+                    if (board[pos].to_ulong() != EMPTY) return -1;
                 }
                 Legal = true;
             }
@@ -275,7 +288,7 @@ int isLegal(int& indexFrom, int& indexTo, const std::string& move) {
             Legal = false;
             break;
     }
-	if (!Legal) return 0;
+	if (!Legal) return -1;
 
     int toSquareOldPiece = board[indexTo].to_ulong();
     board[indexTo] = board[indexFrom];
@@ -286,7 +299,7 @@ int isLegal(int& indexFrom, int& indexTo, const std::string& move) {
     board[indexFrom] = board[indexTo];
     board[indexTo] = toSquareOldPiece;
 
-    if (kingInCheck) return 0;
+    if (kingInCheck) return -1;
 
     return 1;
 }

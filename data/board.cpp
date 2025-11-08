@@ -21,6 +21,8 @@ std::bitset<4> CastelingRights = 0b1111;
 
 std::string LastMove = "";
 
+int MoveSinceLastCaptureOrPawnMove = 0;
+
 void lastMove(const std::string& latestMove) {
     std::cout << "Last move: " << latestMove << "\n";
 }
