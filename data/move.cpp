@@ -51,6 +51,10 @@ bool makeMove(std::string& move) {
                 MoveSinceLastCaptureOrPawnMove++;
             }
 
+	    if (board[indexFrom].to_ulong() == WPAWN+(turn ? 1:0)) {
+		    MoveSinceLastCaptureOrPawnMove = 0;
+	    }
+
             board[indexTo] = board[indexFrom];
 		    board[indexFrom] = EMPTY;
 

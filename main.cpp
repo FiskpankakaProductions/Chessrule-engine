@@ -26,6 +26,7 @@ int main() {
             std::cout << "Check!\n";
         }
         lastMove(LastMove);
+	std::cout << MoveSinceLastCaptureOrPawnMove << '\n';
 
         std::string move;
         std::getline(std::cin, move);
