@@ -22,6 +22,10 @@ enum Piece : uint8_t {
     WKING = 12, BKING = 13
 };
 
+bool AddToHashTable();
+
+void ClearPositionHashTable();
+
 void setup();
 
 void printBoard();

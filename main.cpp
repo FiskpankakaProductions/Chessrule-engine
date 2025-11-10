@@ -18,6 +18,7 @@ int main() {
     setup();
     sendBoard();
     turn = false;
+    AddToHashTable();
     LastMove = "";
     while (true) {
         clearScreen();
@@ -26,30 +27,29 @@ int main() {
             std::cout << "Check!\n";
         }
         lastMove(LastMove);
-	std::cout << MoveSinceLastCaptureOrPawnMove << '\n';
 
         std::string move;
         std::getline(std::cin, move);
 
         if (move.empty()) continue;
         if (move == "q") break;
-	if (move == "50") {
-		if (MoveSinceLastCaptureOrPawnMove >= 100) {
-			std::cout << "Draw by Fifty-move rule\n";
-			break;	
-		}
-		else {
-			std::cout << "No valid case of Fifty-move rule.";
-			std::cin.get();
-			continue;
-		}	
-	}
+        if (move == "50") {
+            if (MoveSinceLastCaptureOrPawnMove >= 100) {
+                std::cout << "Draw by Fifty-move rule\n";
+                break;	
+            }
+            else {
+                std::cout << "No valid case of Fifty-move rule.";
+                std::cin.get();
+                continue;
+            }	
+        }
 
-       if (!makeMove(move)) {
+        if (!makeMove(move)) {
             std::cout << "Invalid input. Press Enter to continue...\n";
             std::cin.get();
             continue;
-       }
+        }
         LastMove = move;
         turn = !turn;
 	    sendBoard();
@@ -66,7 +66,12 @@ int main() {
                 break;
             }
         }
+        if (AddToHashTable()) {
+            clearScreen();
+            printBoard();
+            std::cout << "Draw by Threefold repetition!\n";
+            break;
+        }
     }
-
     return 0;
 }

@@ -73,5 +73,33 @@ void setup() {
         board[i] = setupBoard[i];
     }
 }
+std::vector<int> HashTable;
+std::vector<int> HashTableRepetitions;
 
+extern bool turn;
+bool AddToHashTable() {
+    int hash = 0;
+    for (int i = 0; i < 64; i++) {
+        hash ^= ((board[i].to_ulong()+1) * (i + 1))*3;
+    }
+    hash ^= CastelingRights.to_ulong() * 7;
+    hash ^= turn ? 5 : 11;
+    bool found = false;
+    for (int i = 0; i < HashTable.size(); i++) {
+        if (HashTable[i] == hash) {
+            found = true;
+            HashTableRepetitions[i]++;
+            return HashTableRepetitions[i] == 3;
+        }
+    }
+    if (!found) {
+        HashTable.push_back(hash);
+        HashTableRepetitions.push_back(1);
+    }
+    return false;
+}
 
+void ClearPositionHashTable() {
+    HashTable.clear();
+    HashTableRepetitions.clear();
+}

@@ -20,7 +20,13 @@ std::string translateInputString(const std::string& input) {
     } else if (input == "O-O-O" || input == "o-o-o" || input == "0-0-0") {
         return "O-O-O";
     } else if (input.length() == 2) {
-        return "e2" + input;
+        int indexTo = IndexFrom2D(input[0] - 'a', input[1] - '1');
+        int checkDirection = turn ? 1 : -1;
+        if (board[indexTo+ checkDirection * 8].to_ulong() == (turn ? BPAWN : WPAWN)) {
+            return std::string(1, input[0]) + char(input[1] + checkDirection) + input;
+        } else if (board[indexTo + checkDirection * 16].to_ulong() == (turn ? BPAWN : WPAWN)) {
+            return std::string(1, input[0]) + char(input[1] + checkDirection*2) + input;
+        }
     }
     return input;
 }
@@ -47,12 +53,14 @@ bool makeMove(std::string& move) {
         case 1: {
             if (board[indexTo].to_ulong() != EMPTY) {
                 MoveSinceLastCaptureOrPawnMove = 0;
+                ClearPositionHashTable();
             } else {
                 MoveSinceLastCaptureOrPawnMove++;
             }
 
 	    if (board[indexFrom].to_ulong() == WPAWN+(turn ? 1:0)) {
 		    MoveSinceLastCaptureOrPawnMove = 0;
+            ClearPositionHashTable();
 	    }
 
             board[indexTo] = board[indexFrom];
@@ -60,15 +68,15 @@ bool makeMove(std::string& move) {
 
             int piece = board[indexTo].to_ulong();
             if (piece == WROOK) {
-                if (indexTo%8 == 0) CastelingRights[0] = false;
-                if (indexTo%8 == 7) CastelingRights[1] = false;
+                if (indexTo%8 == 0 && CastelingRights[0]) {CastelingRights[0] = false; ClearPositionHashTable();}
+                if (indexTo%8 == 7 && CastelingRights[1]) {CastelingRights[1] = false; ClearPositionHashTable();}
             }
             if (piece == BROOK) {
-                if (indexTo%8 == 0) CastelingRights[2] = false;
-                if (indexTo%8 == 7) CastelingRights[3] = false;
+                if (indexTo%8 == 0 && CastelingRights[2]) {CastelingRights[2] = false; ClearPositionHashTable();}
+                if (indexTo%8 == 7 && CastelingRights[3]) {CastelingRights[3] = false; ClearPositionHashTable();}
             }
-            if (piece == WKING) { CastelingRights[0] = CastelingRights[1] = false; }
-            if (piece == BKING) { CastelingRights[2] = CastelingRights[3] = false; }
+            if (piece == WKING && (CastelingRights[0] || CastelingRights[1])) { CastelingRights[0] = CastelingRights[1] = false; ClearPositionHashTable();}
+            if (piece == BKING && (CastelingRights[2] || CastelingRights[3])) { CastelingRights[2] = CastelingRights[3] = false; ClearPositionHashTable();}
             return true;
         }
         case 2: {
@@ -85,7 +93,8 @@ bool makeMove(std::string& move) {
             board[kingindex + 1] = board[kingindex + 3];
             board[kingindex] = EMPTY; 
             board[kingindex + 3] = EMPTY;
-            turn ? CastelingRights[2] = CastelingRights[3] = false : CastelingRights[0] = CastelingRights[1];
+            turn ? CastelingRights[2] = CastelingRights[3] = false : CastelingRights[0] = CastelingRights[1] = false;
+            ClearPositionHashTable();
             return true;
         }
         case 4: {
@@ -95,7 +104,8 @@ bool makeMove(std::string& move) {
             board[kingindex - 1] = board[kingindex - 4];
             board[kingindex] = EMPTY; 
             board[kingindex - 4] = EMPTY;
-            turn ? CastelingRights[2] = CastelingRights[3] = false : CastelingRights[0] = CastelingRights[1];
+            turn ? CastelingRights[2] = CastelingRights[3] = false : CastelingRights[0] = CastelingRights[1] = false;
+            ClearPositionHashTable();
             return true;
         }
         case 5: {
@@ -103,6 +113,7 @@ bool makeMove(std::string& move) {
             board[indexTo] = board[indexFrom];
 		    board[indexFrom] = EMPTY;
             board[indexTo] = charToPiece(move[4]) + (turn ? 1 : 0);
+            ClearPositionHashTable();
             return true;
         }
         default: {
