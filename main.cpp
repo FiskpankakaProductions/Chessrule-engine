@@ -32,6 +32,12 @@ int main() {
 
         if (move.empty()) continue;
         if (move == "q") break;
+	if (move == "50") {
+		if (MoveSinceLastCaptureOrPawnMove => 100) {
+			std::cout << "Draw by Fifty-move rule\n";
+			break;	
+		} 
+	}
 
        if (!makeMove(move)) {
             std::cout << "Invalid input. Press Enter to continue...\n";
