@@ -33,10 +33,15 @@ int main() {
         if (move.empty()) continue;
         if (move == "q") break;
 	if (move == "50") {
-		if (MoveSinceLastCaptureOrPawnMove => 100) {
+		if (MoveSinceLastCaptureOrPawnMove >= 100) {
 			std::cout << "Draw by Fifty-move rule\n";
 			break;	
-		} 
+		}
+		else {
+			std::cout << "No valid case of Fifty-move rule.";
+			std::cin.get();
+			continue;
+		}	
 	}
 
        if (!makeMove(move)) {

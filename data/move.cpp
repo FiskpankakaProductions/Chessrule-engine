@@ -32,7 +32,7 @@ bool makeMove(std::string& move) {
     if (move == "O-O" || move == "O-O-O") {
         indexFrom = -1;
         indexTo = -1;
-    } else if (move.length() == 4 && move.length() == 5) {
+    } else if (move.length() == 4 || move.length() == 5) {
         indexFrom = IndexFrom2D(move[0] - 'a', move[1] - '1');
         indexTo = IndexFrom2D(move[2] - 'a', move[3] - '1');
     } else return false;

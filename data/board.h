@@ -7,7 +7,7 @@
 
 extern std::bitset<4> board[64];
 
-int MoveSinceLastCaptureOrPawnMove;
+extern int MoveSinceLastCaptureOrPawnMove;
 
 extern std::string LastMove;
 void lastMove(const std::string& latestMove);
