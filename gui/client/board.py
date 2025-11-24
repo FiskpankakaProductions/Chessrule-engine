@@ -97,6 +97,10 @@ def board():
                         piece_img = pygame.transform.scale(piece_img, (square_size, square_size))
                         screen.blit(piece_img, (col * square_size, row * square_size))
 
+        if selected != "":
+            row, col = selected
+            pygame.draw.rect(screen, (255, 0, 0), (col * square_size, row * square_size, square_size, square_size), 3)
+
         pygame.display.flip()
 
     pygame.quit()
