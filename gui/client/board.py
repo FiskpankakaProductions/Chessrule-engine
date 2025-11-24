@@ -1,5 +1,31 @@
 import pygame
 
+def load_board():
+    with open("../../board.txt", "r") as f:
+        content = [line.strip().split() for line in f.readlines()]
+
+        content.reverse()
+
+        return content
+
+def send_move(start, end):
+
+    files = "abcdefgh"
+
+    start_file = files[start[1]]
+    end_file   = files[end[1]]
+
+    start_rank = 8 - start[0]
+    end_rank   = 8 - end[0]
+
+    start_square = f"{start_file}{start_rank}"
+    end_square = f"{end_file}{end_rank}"
+
+    print(f"Move: {start_square} -> {end_square}")
+
+    return start_square, end_square
+
+
 def board():
     pygame.init()
 
@@ -30,17 +56,33 @@ def board():
         "13": pygame.image.load("assets/pieces/bK.png"),
     }
 
+    selected = ""
+    end = ""
+
     running = True
     while running:
+
+        content = load_board()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False 
+                running = False
 
-        with open("../../board.txt", "r") as f:
-            content = [line.strip().split() for line in f.readlines()]
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = pygame.mouse.get_pos()
+                col = x // square_size
+                row = y // square_size
 
-        content.reverse()
+                if content[row][col] != "0":
+                    selected = row, col 
+                else:
+                    if selected != "":
+                        end = row, col
 
+                        send_move(selected, end) 
+                        selected = ""
+                        end = ""
+                
         screen.fill(backgroundcolor)
 
         for row in range(rows):
