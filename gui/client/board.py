@@ -23,7 +23,7 @@ def send_move(start, end):
 
     print(f"Move: {start_square} -> {end_square}")
 
-    return start_square, end_square
+    return start_square + end_square
 
 
 def board():
@@ -72,16 +72,15 @@ def board():
                 x, y = pygame.mouse.get_pos()
                 col = x // square_size
                 row = y // square_size
+                  
+                if selected != "":
+                    end = row, col
 
-                if content[row][col] != "0":
-                    selected = row, col 
-                else:
-                    if selected != "":
-                        end = row, col
-
-                        send_move(selected, end) 
-                        selected = ""
-                        end = ""
+                    send_move(selected, end) 
+                    selected = ""
+                    end = ""
+                elif content[row][col] != "0":
+                    selected = row, col
                 
         screen.fill(backgroundcolor)
 
