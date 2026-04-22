@@ -1,12 +1,21 @@
 import pygame
 
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def load_image(path):
+    return pygame.image.load(os.path.join(BASE_DIR, path))
+
 def load_board():
-    with open("../../board.txt", "r") as f:
+    path = os.path.join(BASE_DIR, "../../board.txt")
+    path = os.path.normpath(path)  # cleans up ../
+
+    with open(path, "r") as f:
         content = [line.strip().split() for line in f.readlines()]
 
-        content.reverse()
-
-        return content
+    content.reverse()
+    return content
 
 def send_move(start, end):
 
@@ -41,21 +50,20 @@ def board():
     square_size = screenWidth // cols
 
     pice_asset = {
-        "2": pygame.image.load("assets/pieces/wP.png"),
-        "4": pygame.image.load("assets/pieces/wN.png"),
-        "6": pygame.image.load("assets/pieces/wB.png"),
-        "8": pygame.image.load("assets/pieces/wR.png"),
-        "10": pygame.image.load("assets/pieces/wQ.png"),
-        "12": pygame.image.load("assets/pieces/wK.png"),
+        "2": load_image("assets/pieces/wP.png"),
+        "4": load_image("assets/pieces/wN.png"),
+        "6": load_image("assets/pieces/wB.png"),
+        "8": load_image("assets/pieces/wR.png"),
+        "10": load_image("assets/pieces/wQ.png"),
+        "12": load_image("assets/pieces/wK.png"),
 
-        "3": pygame.image.load("assets/pieces/bP.png"),
-        "5": pygame.image.load("assets/pieces/bN.png"),
-        "7": pygame.image.load("assets/pieces/bB.png"),
-        "9": pygame.image.load("assets/pieces/bR.png"),
-        "11": pygame.image.load("assets/pieces/bQ.png"),
-        "13": pygame.image.load("assets/pieces/bK.png"),
+        "3": load_image("assets/pieces/bP.png"),
+        "5": load_image("assets/pieces/bN.png"),
+        "7": load_image("assets/pieces/bB.png"),
+        "9": load_image("assets/pieces/bR.png"),
+        "11": load_image("assets/pieces/bQ.png"),
+        "13": load_image("assets/pieces/bK.png"),
     }
-
     selected = ""
     end = ""
 
